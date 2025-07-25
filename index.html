@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Video Downloader</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Video Downloader</h1>
-    <input type="text" id="videoUrl" placeholder="Paste video URL here..." />
-    <button onclick="fetchDownloadOptions()">Download</button>
+  <h1>🎥 Free Video Downloader</h1>
+  <input type="text" id="url" placeholder="Paste video link here" />
+  <button onclick="fetchInfo()">Fetch Download Options</button>
 
-    <div id="options" class="hidden">
-      <label>Video Quality:
-        <select id="videoQuality"></select>
-      </label>
-      <label>Audio Quality:
-        <select id="audioQuality"></select>
-      </label>
-      <label>Filename:
-        <input type="text" id="fileName" value="MyVideo" />
-      </label>
-      <button onclick="startDownload()">Start Download</button>
-    </div>
+  <div id="options" class="hidden">
+    <h2 id="videoTitle"></h2>
+    <select id="qualitySelect"></select>
+    <input type="text" id="fileName" placeholder="Filename.mp4" />
+    <button onclick="download()">Download</button>
   </div>
 
   <script src="script.js"></script>
