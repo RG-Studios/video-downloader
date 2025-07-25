@@ -1,33 +1,76 @@
-const backendURL = "https://video-downloader-backend-291i.onrender.com"; // replace this
+const backendUrl = "https://your-backend-url.onrender.com"; // Replace with your Render backend URL
 
-async function fetchInfo() {
-  const url = document.getElementById("url").value;
-  if (!url) return alert("Paste a URL");
+async function fetchDownloadOptions() {
+  const videoUrl = document.getElementById("videoUrl").value.trim();
+  if (!videoUrl) {
+    alert("Please enter a video URL.");
+    return;
+  }
 
-  const res = await fetch(`${backendURL}/api/info?url=${encodeURIComponent(url)}`);
-  const data = await res.json();
+  try {
+    const response = await fetch(`${backendUrl}/fetch`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: videoUrl }),
+    });
 
-  if (data.error) return alert(data.error);
+    if (!response.ok) {
+      throw new Error("Failed to fetch download options");
+    }
 
-  document.getElementById("videoTitle").innerText = data.title;
-  const select = document.getElementById("qualitySelect");
-  select.innerHTML = "";
-
-  data.streams.forEach(stream => {
-    const opt = document.createElement("option");
-    opt.value = stream.itag;
-    opt.innerText = stream.resolution;
-    select.appendChild(opt);
-  });
-
-  document.getElementById("options").classList.remove("hidden");
+    const data = await response.json();
+    populateOptions(data);
+    document.getElementById("options").classList.remove("hidden");
+  } catch (error) {
+    alert("Error fetching download options. Check the URL or try again later.");
+    console.error(error);
+  }
 }
 
-function download() {
-  const url = document.getElementById("url").value;
-  const itag = document.getElementById("qualitySelect").value;
-  const name = document.getElementById("fileName").value || "video.mp4";
+function populateOptions(data) {
+  const videoSelect = document.getElementById("videoQuality");
+  const audioSelect = document.getElementById("audioQuality");
 
-  const link = `${backendURL}/api/download?url=${encodeURIComponent(url)}&quality=${itag}&name=${encodeURIComponent(name)}`;
-  window.open(link, "_blank");
+  videoSelect.innerHTML = "";
+  audioSelect.innerHTML = "";
+
+  if (data.video && data.video.length > 0) {
+    data.video.forEach((v) => {
+      const opt = document.createElement("option");
+      opt.value = v.itag;
+      opt.textContent = `${v.resolution} (${v.mime})`;
+      videoSelect.appendChild(opt);
+    });
+  }
+
+  if (data.audio && data.audio.length > 0) {
+    data.audio.forEach((a) => {
+      const opt = document.createElement("option");
+      opt.value = a.itag;
+      opt.textContent = `${a.bitrate}kbps (${a.mime})`;
+      audioSelect.appendChild(opt);
+    });
+  }
+}
+
+async function startDownload() {
+  const videoUrl = document.getElementById("videoUrl").value.trim();
+  const videoItag = document.getElementById("videoQuality").value;
+  const audioItag = document.getElementById("audioQuality").value;
+  const fileName = document.getElementById("fileName").value.trim();
+
+  if (!fileName.endsWith(".mp4")) {
+    alert("Please provide a valid filename ending with .mp4");
+    return;
+  }
+
+  const downloadUrl = `${backendUrl}/download?url=${encodeURIComponent(videoUrl)}&video_itag=${videoItag}&audio_itag=${audioItag}&filename=${encodeURIComponent(fileName)}`;
+
+  // Create a hidden anchor to trigger download
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
