@@ -2,21 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Video Downloader</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Video Downloader</title>
+  <script defer src="script.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <h1>🎥 Free Video Downloader</h1>
-  <input type="text" id="url" placeholder="Paste video link here" />
-  <button onclick="fetchInfo()">Fetch Download Options</button>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-4">
+  <div class="bg-white p-6 rounded-xl shadow-xl max-w-xl w-full">
+    <h1 class="text-2xl font-bold text-center text-indigo-600 mb-6">🎥 Smart Video Downloader</h1>
 
-  <div id="options" class="hidden">
-    <h2 id="videoTitle"></h2>
-    <select id="qualitySelect"></select>
-    <input type="text" id="fileName" placeholder="Filename.mp4" />
-    <button onclick="download()">Download</button>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Paste Video URL</label>
+    <input type="text" id="videoUrl" placeholder="https://example.com/video" class="w-full mb-4 p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+    <button onclick="fetchDownloadOptions()" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition w-full font-semibold">Fetch Download Options</button>
+
+    <div id="options" class="hidden mt-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Video Quality</label>
+        <select id="videoQuality" class="w-full p-2 border rounded-md shadow-sm">
+          <option value="720p">720p</option>
+          <option value="480p">480p</option>
+          <option value="360p">360p</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Audio Quality</label>
+        <select id="audioQuality" class="w-full p-2 border rounded-md shadow-sm">
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Rename File</label>
+        <input type="text" id="fileName" class="w-full p-2 border rounded-md shadow-sm" placeholder="myvideo.mp4">
+      </div>
+
+      <button onclick="startDownload()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition w-full font-semibold">Download Now</button>
+    </div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
