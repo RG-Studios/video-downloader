@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Downloader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Platform Video Downloader</h1>
+    <div class="platforms">
+      <img src="youtube.png" alt="YouTube" title="YouTube">
+      <img src="instagram.png" alt="Instagram" title="Instagram">
+      <img src="facebook.png" alt="Facebook" title="Facebook">
+      <img src="tiktok.png" alt="TikTok" title="TikTok">
+    </div>
+
+    <input type="text" id="videoUrl" placeholder="Paste video URL here..." />
+
+    <button onclick="fetchDownloadOptions()">Download</button>
+
+    <div id="options" class="hidden">
+      <h3>Select Format</h3>
+      <label>Video Quality:
+        <select id="videoQuality">
+          <option value="1080p">1080p</option>
+          <option value="720p">720p</option>
+          <option value="480p">480p</option>
+        </select>
+      </label>
+      <label>Audio Quality:
+        <select id="audioQuality">
+          <option value="320kbps">320kbps</option>
+          <option value="192kbps">192kbps</option>
+          <option value="128kbps">128kbps</option>
+        </select>
+      </label>
+      <label>File Name:
+        <input type="text" id="fileName" value="MyDownload" />
+      </label>
+      <button onclick="startDownload()">Start Download</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
