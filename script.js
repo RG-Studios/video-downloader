@@ -1,4 +1,4 @@
-const backendUrl = "https://video-downloader-backend-291i.onrender.com"; // Your Render backend URL
+const backendUrl = "https://video-downloader-backend-291i.onrender.com"; 
 
 async function fetchDownloadOptions() {
   const videoUrl = document.getElementById("videoUrl").value.trim();
