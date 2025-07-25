@@ -1,4 +1,4 @@
-const backendUrl = "https://video-downloader-backend-291i.onrender.com"; // Replace with your Render backend URL
+const backendUrl = "https://video-downloader-backend-291i.onrender.com"; // Your Render backend URL
 
 async function fetchDownloadOptions() {
   const videoUrl = document.getElementById("videoUrl").value.trim();
@@ -38,7 +38,7 @@ function populateOptions(data) {
     data.video.forEach((v) => {
       const opt = document.createElement("option");
       opt.value = v.itag;
-      opt.textContent = `${v.resolution} (${v.mime})`;
+      opt.textContent = `${v.resolution} - ${v.mime}`;
       videoSelect.appendChild(opt);
     });
   }
@@ -47,7 +47,7 @@ function populateOptions(data) {
     data.audio.forEach((a) => {
       const opt = document.createElement("option");
       opt.value = a.itag;
-      opt.textContent = `${a.bitrate}kbps (${a.mime})`;
+      opt.textContent = `${a.bitrate}kbps - ${a.mime}`;
       audioSelect.appendChild(opt);
     });
   }
@@ -59,18 +59,22 @@ async function startDownload() {
   const audioItag = document.getElementById("audioQuality").value;
   const fileName = document.getElementById("fileName").value.trim();
 
-  if (!fileName.endsWith(".mp4")) {
-    alert("Please provide a valid filename ending with .mp4");
+  if (!videoUrl || !videoItag || !audioItag || !fileName) {
+    alert("Please fill all the fields.");
     return;
   }
 
-  const downloadUrl = `${backendUrl}/download?url=${encodeURIComponent(videoUrl)}&video_itag=${videoItag}&audio_itag=${audioItag}&filename=${encodeURIComponent(fileName)}`;
+  if (!fileName.endsWith(".mp4")) {
+    alert("Filename must end with .mp4");
+    return;
+  }
 
-  // Create a hidden anchor to trigger download
-  const link = document.createElement("a");
-  link.href = downloadUrl;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const url = `${backendUrl}/download?url=${encodeURIComponent(videoUrl)}&video_itag=${videoItag}&audio_itag=${audioItag}&filename=${encodeURIComponent(fileName)}`;
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
